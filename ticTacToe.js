@@ -55,17 +55,29 @@ function checkWinner(winnerSeq) {
             msgr.style.visibility = 'visible';
             msg.innerText = `Player 'X' is the winner`;
             isWinner = true;
+            toggleCombinations(seq);
             disableAll();
         } else if(buttons[a].innerText === 'O' && buttons[c].innerText === 'O' && buttons[b].innerText === buttons[c].innerText) {
             msgr.style.visibility = 'visible';
             msg.innerText = `Player 'O' is the winner`;
             isWinner = true;
+            toggleCombinations(seq);
             disableAll();
         }
     }
     if(!isWinner && !allFilled) {
         msgr.style.visibility = 'visible';
         msg.innerText = `Match tied!`;
+    }
+}
+// function to toggle color of combinations
+function toggleCombinations(seq) {
+    for(let a of seq) {
+        if(buttons[a].style.backgroundColor !== '#ccc5b9') {
+            buttons[a].style.backgroundColor = '#ccc5b9';
+        } else {
+            buttons[a].style.backgroundColor = '#dedbd2';
+        }
     }
 }
 // check all th buttons are filled or not
@@ -95,3 +107,21 @@ playAgain.addEventListener('click', () => {
     msg.innerText = '';
     msgr.style.visibility = 'hidden';
 })
+// animation for the new game
+playAgain.addEventListener('click', () => {
+    container.style.visibility = 'hidden';
+    buttons.forEach((button) => {
+            button.style.visibility = 'hidden';
+        });
+    setTimeout(() => {
+        setTimeout(() => {
+        container.style.visibility = 'visible';
+    }, 100);
+        buttons.forEach((button, idx) => {
+            button.style.backgroundColor = '#dedbd2';
+            setTimeout(() => {
+                button.style.visibility = 'visible';
+            }, 200 * idx)
+        });
+    }, 200);
+});
