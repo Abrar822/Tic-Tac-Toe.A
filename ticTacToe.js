@@ -1,9 +1,9 @@
 let container = document.querySelector('.container');
 let buttons = document.querySelectorAll('.button');
 let title = document.querySelector('.title').querySelector('h1');
+let turn = 'X';
 // on load animations
 window.addEventListener('load', () => {
-    let turn = 'X';
     let str = 'Tic-Tac-Toe';
     setTimeout(() => {
         container.style.visibility = 'visible';
@@ -29,7 +29,7 @@ window.addEventListener('load', () => {
                 button.style.pointerEvents = 'none';
                 setTimeout(() => {
                     checkWinner(winnerSeq);
-                }, 1000);
+                }, 300);
             });
         });
     }, 200);
@@ -57,17 +57,21 @@ function checkWinner(winnerSeq) {
             isWinner = true;
             toggleCombinations(seq);
             disableAll();
+            return;
         } else if(buttons[a].innerText === 'O' && buttons[c].innerText === 'O' && buttons[b].innerText === buttons[c].innerText) {
             msgr.style.visibility = 'visible';
             msg.innerText = `Player 'O' is the winner`;
             isWinner = true;
             toggleCombinations(seq);
             disableAll();
+            return;
         }
     }
-    if(!isWinner && !allFilled) {
+    if(!isWinner && allFilled()) {
         msgr.style.visibility = 'visible';
         msg.innerText = `Match tied!`;
+        disableAll();
+        isWinner = false;
     }
 }
 // function to toggle color of combinations
@@ -82,12 +86,7 @@ function toggleCombinations(seq) {
 }
 // check all th buttons are filled or not
 function allFilled() {
-    buttons.forEach((button) => {
-        if(button.innerText !== '') {
-            return false;
-        }
-    })
-    return true;
+    return Array.from(buttons).every(button => button.innerText !== '');
 }
 // to disable all buttons
 function disableAll() {
@@ -98,6 +97,7 @@ function disableAll() {
 // play again button
 let playAgain = document.querySelector('.btns');
 playAgain.addEventListener('click', () => {
+    turn = 'X';
     let msgr = document.querySelector('.msgr');
     let msg = document.querySelector('.msg');
     buttons.forEach((button) => {
@@ -106,9 +106,6 @@ playAgain.addEventListener('click', () => {
     })
     msg.innerText = '';
     msgr.style.visibility = 'hidden';
-})
-// animation for the new game
-playAgain.addEventListener('click', () => {
     container.style.visibility = 'hidden';
     buttons.forEach((button) => {
             button.style.visibility = 'hidden';
@@ -124,4 +121,4 @@ playAgain.addEventListener('click', () => {
             }, 200 * idx)
         });
     }, 200);
-});
+})
